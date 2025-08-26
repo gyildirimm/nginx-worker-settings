@@ -34,6 +34,55 @@ events {
 }
 ```
 
+## ulimit -n Nedir?
+
+`ulimit -n` komutu, bir işlemin (process) aynı anda açabileceği maksimum **dosya tanımlayıcı** (file descriptor) sayısını gösterir ve kontrol eder. Bu limitler şunları kapsar:
+
+### Mevcut Limiti Görüntüleme
+
+```bash
+# Mevcut soft limit
+ulimit -n
+
+# Tüm limitler
+ulimit -a
+
+# Hard ve soft limitleri göster
+ulimit -Hn  # Hard limit
+ulimit -Sn  # Soft limit
+```
+
+### Geçici Olarak Değiştirme
+
+```bash
+# Soft limiti artır (sadece mevcut session için)
+ulimit -n 65536
+
+# Hard limit aşılamaz, sadece soft limit değiştirilebilir
+ulimit -n 100000  # Hard limitten büyükse hata verir
+```
+
+### Kalıcı Hale Getirme
+
+#### 1. Sistem Geneli - /etc/security/limits.conf
+
+```bash
+# /etc/security/limits.conf dosyasına ekle
+* soft nofile 65536
+* hard nofile 65536
+
+# Belirli kullanıcı için
+nginx soft nofile 100000
+nginx hard nofile 100000
+```
+
+> **⚠️ Önemli**: `/etc/security/limits.conf` dosyasındaki değişiklikler **sistem yeniden başlatıldığında** veya **kullanıcı yeniden login olduğunda** etkili olur. Mevcut çalışan process'ler (NGINX dahil) bu değişiklikten etkilenmez. NGINX'i yeniden başlatmanız gerekir.
+
+### Önemli Notlar
+
+- **Soft Limit**: Kullanıcının değiştirebileceği limit
+- **Hard Limit**: Sadece root'un değiştirebileceği maksimum limit
+
 ### Dosya Limiti
 
 ```nginx
