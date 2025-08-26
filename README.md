@@ -64,7 +64,7 @@ ulimit -n 100000  # Hard limitten büyükse hata verir
 
 ### Kalıcı Hale Getirme
 
-#### 1. Sistem Geneli - /etc/security/limits.conf
+#### Sistem Geneli - /etc/security/limits.conf
 
 ```bash
 # /etc/security/limits.conf dosyasına ekle
